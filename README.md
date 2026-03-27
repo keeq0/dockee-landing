@@ -1,1 +1,1 @@
-# dockee_landing
+# Лендинг для сервиса Dockee
