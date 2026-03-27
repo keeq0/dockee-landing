@@ -1,15 +1,18 @@
 <template>
   <TheHeader />
+  <MainSection />
 </template>
 
 <script>
+import MainSection from './components/MainSection/MainSection.vue';
 import TheHeader from './components/TheHeader/TheHeader.vue';
 
 
 
 export default {
   components: {
-    TheHeader
+    TheHeader,
+    MainSection
   }
 }
 </script>
@@ -27,6 +30,16 @@ export default {
 
 a {
   color: #000;
+}
+
+h1 {
+  padding-bottom: 20px;
+}
+
+/* -- Colors -- */
+
+.color-blue {
+  color: #6C67FD;
 }
 
 
