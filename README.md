@@ -1,24 +1,16 @@
-# dokkee-front
+# Лендинг-страниц сервиса Dockee
 
-## Project setup
+## Установка зависимостей
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Запуск проекта
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Сборка проекта
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
