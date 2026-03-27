@@ -30,7 +30,8 @@ export default {
         align-items: center;
         justify-content: space-between;
         padding: 0 40px;
-
+        position: relative; /* чтобы дочерние элементы не выходили за границы */
+        overflow: visible; /* чтобы полоска не обрезалась */
     }
 
     .navigation__link {
@@ -38,11 +39,29 @@ export default {
         font-weight: 500;
         color: #000;
         transition: color .2s;
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .navigation__link::after {
+        content: '';
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 3px;
+        background: #6C67FD;
+        border-radius: 50px;
+        transition: width .2s ease;
     }
 
     .navigation__link:hover {
         color: #6C67FD;
     }
 
-    
+    .navigation__link:hover::after {
+        width: 100%;
+    }
 </style>

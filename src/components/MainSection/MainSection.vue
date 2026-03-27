@@ -1,8 +1,16 @@
 <template>
-  <section id="service" class="service">
+  <section
+    id="service"
+    class="service"
+    :class="{ animate: isAnimated }"
+  >
     <div class="service__description">
       <div class="service__badge">
-        <img src="@/assets/icons/service_stars.png" class="icon__stars" alt="Звёзды"/>
+        <img
+          src="@/assets/icons/service_stars.png"
+          class="icon__stars"
+          alt="Звёзды"
+        />
         ИИ-технологии нового поколения
       </div>
       <h1 class="service__title">
@@ -15,7 +23,11 @@
       </h2>
       <div class="service__bottom">
         <button class="service__button">
-          <img src="@/assets/icons/service_button.png" class="icon" alt="Начать" />
+          <img
+            src="@/assets/icons/service_button.png"
+            class="icon"
+            alt="Начать"
+          />
           Начать пользоваться
         </button>
         <p class="service__hint">
@@ -23,13 +35,28 @@
         </p>
       </div>
     </div>
-    <img src="@/assets/service_photo.svg" class="service__photo" alt="Документы" />
+    <img
+      src="@/assets/service_photo.svg"
+      class="service__photo"
+      alt="Документы"
+    />
   </section>
 </template>
 
 <script>
 export default {
   name: "MainSection",
+  data() {
+    return {
+      isAnimated: false,
+    };
+  },
+  mounted() {
+    // Небольшая задержка, чтобы браузер успел применить начальные стили
+    setTimeout(() => {
+      this.isAnimated = true;
+    }, 50);
+  },
 };
 </script>
 
@@ -40,11 +67,56 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 50px 0;
 }
 
 .service__description {
   width: 700px;
+}
+
+/* Анимация для элементов слева */
+.service__badge,
+.service__title,
+.service__subtitle,
+.service__bottom {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1),
+    transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.service__badge {
+  transition-delay: 0s;
+}
+.service__title {
+  transition-delay: 0.1s;
+}
+.service__subtitle {
+  transition-delay: 0.2s;
+}
+.service__bottom {
+  transition-delay: 0.3s;
+}
+
+/* Анимация для фото снизу */
+.service__photo {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.2s,
+    transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.2s;
+}
+
+/* Конечное состояние при анимации */
+.service.animate .service__badge,
+.service.animate .service__title,
+.service.animate .service__subtitle,
+.service.animate .service__bottom {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.service.animate .service__photo {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .service__badge {

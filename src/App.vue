@@ -1,9 +1,11 @@
 <template>
   <TheHeader />
   <MainSection />
+  <AboutSection />
 </template>
 
 <script>
+import AboutSection from './components/AboutSection/AboutSection.vue';
 import MainSection from './components/MainSection/MainSection.vue';
 import TheHeader from './components/TheHeader/TheHeader.vue';
 
@@ -12,7 +14,8 @@ import TheHeader from './components/TheHeader/TheHeader.vue';
 export default {
   components: {
     TheHeader,
-    MainSection
+    MainSection,
+    AboutSection
   }
 }
 </script>
@@ -34,6 +37,10 @@ a {
 
 h1 {
   padding-bottom: 20px;
+}
+
+section {
+  padding: 50px 0;
 }
 
 /* -- Colors -- */
