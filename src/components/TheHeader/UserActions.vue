@@ -47,6 +47,37 @@ export default {
         cursor: pointer;
     }
     
+@media (max-width: 768px) {
+    .user-actions {
+        gap: 12px;
+    }
     
+    .user-actions__language {
+        font-size: 14px;
+    }
+    
+    .user-actions__button {
+        width: 100px;
+        height: 35px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+}
 
+@media (max-width: 480px) {
+    .user-actions {
+        gap: 10px;
+    }
+    
+    .user-actions__language {
+        font-size: 13px;
+    }
+    
+    .user-actions__button {
+        width: 80px;
+        height: 32px;
+        font-size: 13px;
+        border-radius: 10px;
+    }
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <section class="about" :class="{ animate: isAnimated }">
-    <div class="about__description">
+  <section class="about">
+    <div class="about__description" ref="descriptionRef">
       <h3 class="about__title">Dockee</h3>
       <p class="about__text">
         Cовременное решение для быстрой и точной проверки юридических документов.
@@ -44,8 +44,11 @@
       <div
         v-for="(benefit, index) in benefits"
         :key="index"
-        class="benefit__item"
-        :style="{ transitionDelay: isAnimated ? index * 0.1 + 's' : '0s' }"
+        :ref="(el) => setBenefitRef(el, index)"
+        :class="[
+          'benefit__item',
+          index % 2 === 0 ? 'benefit__item--right' : 'benefit__item--left'
+        ]"
       >
         <div class="benefit__icon">
           <img :src="benefit.icon" :alt="benefit.title" />
@@ -63,7 +66,6 @@
 export default {
   data() {
     return {
-      isAnimated: false,
       benefits: [
         {
           icon: require("@/assets/icons/time.png"),
@@ -103,21 +105,71 @@ export default {
       animationDuration: 1500,
       startTime: null,
       animationFrame: null,
+      animationStarted: false,
+      observer: null,
+      benefitObservers: [],
+      benefitElements: [],
     };
   },
   mounted() {
-    this.startAnimation();
-    // Небольшая задержка для анимации появления
-    setTimeout(() => {
-      this.isAnimated = true;
-    }, 50);
+    this.$nextTick(() => {
+      this.initObservers();
+    });
   },
   beforeUnmount() {
+    if (this.observer) this.observer.disconnect();
+    if (this.benefitObservers.length) {
+      this.benefitObservers.forEach((obs) => obs.disconnect());
+    }
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
     }
   },
   methods: {
+    initObservers() {
+      // Наблюдатель за блоком описания
+      if (this.$refs.descriptionRef) {
+        const descObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && !this.animationStarted) {
+                entry.target.classList.add("description-visible");
+                this.startAnimation();
+                this.animationStarted = true;
+                descObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        descObserver.observe(this.$refs.descriptionRef);
+        this.observer = descObserver;
+      }
+
+      // Наблюдатели за каждым преимуществом
+      if (this.benefitElements.length) {
+        this.benefitElements.forEach((el) => {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add("benefit-visible");
+                  observer.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 1 }
+          );
+          observer.observe(el);
+          this.benefitObservers.push(observer);
+        });
+      }
+    },
+    setBenefitRef(el, index) {
+      if (el) {
+        this.benefitElements[index] = el;
+      }
+    },
     startAnimation() {
       this.startTime = performance.now();
       const animate = (now) => {
@@ -153,7 +205,8 @@ export default {
       this.animatedStats.partners = ">" + this.targetStats.partners;
       this.animatedStats.years = this.targetStats.years + " года";
       this.animatedStats.accuracy = this.targetStats.accuracy + "%";
-      this.animatedStats.documentsChecked = ">" + this.targetStats.documentsChecked;
+      this.animatedStats.documentsChecked =
+        ">" + this.targetStats.documentsChecked;
     },
   },
 };
@@ -167,7 +220,6 @@ export default {
   gap: 25px;
 }
 
-/* Анимация для левой карточки */
 .about__description {
   position: relative;
   width: 740px;
@@ -176,30 +228,35 @@ export default {
   background-color: #6c67fd;
   padding: 20px 30px;
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateY(30px);
   transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1),
     transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-.about.animate .about__description {
+.about__description.description-visible {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
-/* Анимация для преимуществ (приезжают справа по очереди) */
 .benefit__item {
   opacity: 0;
-  transform: translateX(30px);
   transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1),
     transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 
-.about.animate .benefit__item {
+.benefit__item--right {
+  transform: translateX(10px);
+}
+
+.benefit__item--left {
+  transform: translateX(-10px);
+}
+
+.benefit__item.benefit-visible {
   opacity: 1;
   transform: translateX(0);
 }
 
-/* Остальные стили без изменений */
 h3 {
   font-size: 40px;
   font-weight: 800;
@@ -220,6 +277,8 @@ h3 {
   grid-template-columns: 210px 140px;
   gap: 35px;
   row-gap: 13.64px;
+  list-style: none;
+  padding: 0;
 }
 
 .about__bottom {
@@ -362,5 +421,116 @@ h3 {
   margin: 0;
   color: #333;
   line-height: 1.4;
+}
+
+@media (max-width: 1200px) {
+  .about {
+    width: 90%;
+    flex-direction: column;
+  }
+
+  .about__description {
+    width: 100%;
+    height: auto;
+    min-height: 435px;
+  }
+
+  .about__benefits {
+    width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .about__bottom {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .about__stats {
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .about__documents {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .document__photo {
+    display: none;
+  }
+
+  .about__description {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  h3 {
+    font-size: 40px;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+
+  .about__text {
+    font-size: 14px;
+    padding-bottom: 30px;
+    text-align: center;
+  }
+
+  .stats__title {
+    font-size: 12px;
+  }
+
+  .stats__value {
+    font-size: 28px;
+  }
+
+  .documents {
+    font-size: 45px;
+  }
+
+  .documents__title {
+    font-size: 12px;
+  }
+
+  .benefit__icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .benefit__title {
+    font-size: 16px;
+  }
+
+  .benefit__text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .about__stats {
+    gap: 15px;
+  }
+
+  .stats__item {
+    text-align: center;
+  }
+
+  .about__documents {
+    height: 120px;
+    border-radius: 30px;
+  }
+
+  .benefit__item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about__benefits {
+    gap: 20px;
+  }
 }
 </style>

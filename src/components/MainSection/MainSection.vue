@@ -14,7 +14,7 @@
         ИИ-технологии нового поколения
       </div>
       <h1 class="service__title">
-        Сервис проверки юридических документов
+        Сервис анализа и проверки документов
         <span class="color-blue">с помощью ИИ</span>
       </h1>
       <h2 class="service__subtitle">
@@ -52,7 +52,6 @@ export default {
     };
   },
   mounted() {
-    // Небольшая задержка, чтобы браузер успел применить начальные стили
     setTimeout(() => {
       this.isAnimated = true;
     }, 50);
@@ -73,13 +72,12 @@ export default {
   width: 700px;
 }
 
-/* Анимация для элементов слева */
 .service__badge,
 .service__title,
 .service__subtitle,
 .service__bottom {
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateY(30px);
   transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1),
     transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
@@ -97,7 +95,6 @@ export default {
   transition-delay: 0.3s;
 }
 
-/* Анимация для фото снизу */
 .service__photo {
   opacity: 0;
   transform: translateY(30px);
@@ -105,13 +102,12 @@ export default {
     transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) 0.2s;
 }
 
-/* Конечное состояние при анимации */
 .service.animate .service__badge,
 .service.animate .service__title,
 .service.animate .service__subtitle,
 .service.animate .service__bottom {
   opacity: 1;
-  transform: translateX(0);
+  transform: translateY(0);
 }
 
 .service.animate .service__photo {
@@ -199,6 +195,8 @@ export default {
   border: 1px solid #e6e6e6;
   color: #a2a2a2;
   border-radius: 50px;
+  backdrop-filter: blur(1px);
+  background-color: rgba(240,240,240,0.5)
 }
 
 .service__photo {
@@ -240,6 +238,62 @@ export default {
   .service__photo {
     margin-top: 40px;
     max-width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .service__title {
+    font-size: 26px;
+  }
+  
+  .service__subtitle {
+    font-size: 16px;
+    padding-bottom: 30px;
+  }
+  
+  .service__button {
+    width: 220px;
+    height: 45px;
+    font-size: 14px;
+  }
+  
+  .service__photo {
+    max-width: 250px;
+  }
+  
+  .service__hint {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .service__title {
+    font-size: 26px;
+  }
+  
+  .service__subtitle {
+    font-size: 14px;
+    padding-bottom: 25px;
+  }
+  
+  .service__button {
+    width: 200px;
+    height: 42px;
+    font-size: 13px;
+  }
+  
+  .service__photo {
+    max-width: 200px;
+  }
+  
+  .service__bottom {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .icon {
+    width: 15px;
+    height: 15px;
   }
 }
 </style>
