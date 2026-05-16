@@ -10,6 +10,7 @@
     <TheHeader />
     <MainSection />
     <AboutSection />
+    <SubscriptionSection />
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import AboutSection from './components/AboutSection/AboutSection.vue';
 import MainSection from './components/MainSection/MainSection.vue';
 import TheHeader from './components/TheHeader/TheHeader.vue';
 import ParticleBackground from './components/ParticleBackground.vue';
+import SubscriptionSection from './components/SubscriptionSection/SubscriptionSection.vue';
 
 export default {
   components: {
@@ -25,6 +27,7 @@ export default {
     MainSection,
     AboutSection,
     ParticleBackground,
+    SubscriptionSection
   },
 };
 </script>
